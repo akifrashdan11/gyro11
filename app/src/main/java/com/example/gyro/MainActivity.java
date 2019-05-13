@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.hardware.SensorManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor gyroscopeSensor;
     private SensorEventListener gyroscopeEventListener;
+    TextView xvalue,yvalue,zvalue;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -21,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+        xvalue=(TextView) findViewById(R.id.xvalue);
+        yvalue=(TextView) findViewById(R.id.yvalue);
+        zvalue=(TextView) findViewById(R.id.zvalue);
+
 
         if(gyroscopeSensor==null){
             Toast.makeText(this, "The device has no Gyroscope !", Toast.LENGTH_SHORT).show();
@@ -35,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
                 }else if (sensorEvent.values[2]<-0.5f){
                     getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
                 }
-
+                xvalue.setText("xValue: "+sensorEvent.values[0]);
+                yvalue.setText("yValue: "+sensorEvent.values[1]);
+                zvalue.setText("zValue :"+sensorEvent.values[2]);
 
             }
 
@@ -44,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
+        sensorManager.registerListener(gyroscopeEventListener,gyroscopeSensor,SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
